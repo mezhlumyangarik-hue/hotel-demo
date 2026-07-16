@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ադմինիստրատորի Կաբինետ | Royal Ararat Palace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #070a13;
+            --bg-card: #0f172a;
+            --cyan-glow: #38bdf8;
+            --cyan-dark: #0ea5e9;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --success-green: #10b981;
+            --danger-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            padding: 40px 20px;
+        }
+
+        .header-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
+        }
+
+        .header-panel h1 {
+            font-size: 2rem;
+            color: var(--cyan-glow);
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-logout {
+            background: transparent;
+            color: var(--danger-red);
+            border: 1px solid var(--danger-red);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .table-wrapper {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            color: var(--cyan-glow);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        td {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .btn-confirm {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+
+        .btn-confirm:hover {
+            background: var(--success-green);
+            color: #000;
+        }
+
+        .btn-cancel {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-red);
+            border: 1px solid var(--danger-red);
+        }
+
+        .btn-cancel:hover {
+            background: var(--danger-red);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-panel">
+        <h1>Hotel Admin Panel</h1>
+        <a href="/logout" class="btn-logout"><i class="fa-solid fa-sign-out"></i> Ելք</a>
+    </div>
+
+    <div class="container">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Հաճախորդ</th>
+                        <th>Հեռախոս</th>
+                        <th>Սենյակ</th>
+                        <th>Մուտք / Ելք</th>
+                        <th>Կարգավիճակ</th>
+                        <th>Գործողություն (SMS Ծանուցմամբ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+                        <td style="font-weight: bold;">{{ booking.guest_name }}</td>
+                        <td>{{ booking.phone }}</td>
+                        <td>
+                            <span style="color: var(--cyan-glow);">Սենյակ {{ booking.room_number }}</span><br>
+                            <small style="color: var(--text-gray);">{{ booking.room_type_name }}</small>
+                        </td>
+                        <td>{{ booking.check_in }} — {{ booking.check_out }}</td>
+                        <td>
+                            {% if booking.status == 'Սպասման մեջ' %}
+                                <span class="status-badge status-pending">Սպասման մեջ</span>
+                            {% elif booking.status == 'Հաստատված' %}
+                                <span class="status-badge status-confirmed">Հաստատված</span>
+                            {% else %}
+                                <span class="status-badge status-cancelled">Չեղարկված</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="actions">
+                                {% if booking.status == 'Սպասման մեջ' %}
+                                <button class="btn-action btn-confirm" onclick="updateStatus('{{ booking.id }}', 'Հաստատված')">Հաստատել</button>
+                                <button class="btn-action btn-cancel" onclick="updateStatus('{{ booking.id }}', 'Չեղարկված')">Չեղարկել</button>
+                                {% else %}
+                                <span style="color: var(--text-gray); font-style: italic;">Ավարտված</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(bookingId, status) {
+            if(confirm(`Վստա՞հ եք, որ ուզում եք պատվերը նշել որպես "${status}"։ Լրացուցիչ կուղարկվի ավտոմատ SMS ծանուցում։`)) {
+                fetch('/admin/update-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ booking_id: bookingId, status: status })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if(result.status === 'success') {
+                        location.reload();
+                    } else {
+                        alert('Սխալ տեղի ունեցավ։');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
